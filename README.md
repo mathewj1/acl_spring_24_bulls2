@@ -1,6 +1,10 @@
 # Spring 2024 - Kellogg Analytical Consulting Lab x Chicago Bulls 
 
 Team Members
+* Justin Mathew
+* Melissa Parks 
+* Elena Ramos
+* Michael Sienko
 * Jay Sheth
 
 

@@ -1,2 +1,5 @@
 *.csv
 data/
+
+ads_api
+ads_api/

@@ -1,0 +1,1129 @@
+\documentclass[11pt]{article}
+
+    \usepackage[breakable]{tcolorbox}
+    \usepackage{parskip} % Stop auto-indenting (to mimic markdown behaviour)
+    
+
+    % Basic figure setup, for now with no caption control since it's done
+    % automatically by Pandoc (which extracts ![](path) syntax from Markdown).
+    \usepackage{graphicx}
+    % Maintain compatibility with old templates. Remove in nbconvert 6.0
+    \let\Oldincludegraphics\includegraphics
+    % Ensure that by default, figures have no caption (until we provide a
+    % proper Figure object with a Caption API and a way to capture that
+    % in the conversion process - todo).
+    \usepackage{caption}
+    \DeclareCaptionFormat{nocaption}{}
+    \captionsetup{format=nocaption,aboveskip=0pt,belowskip=0pt}
+
+    \usepackage{float}
+    \floatplacement{figure}{H} % forces figures to be placed at the correct location
+    \usepackage{xcolor} % Allow colors to be defined
+    \usepackage{enumerate} % Needed for markdown enumerations to work
+    \usepackage{geometry} % Used to adjust the document margins
+    \usepackage{amsmath} % Equations
+    \usepackage{amssymb} % Equations
+    \usepackage{textcomp} % defines textquotesingle
+    % Hack from http://tex.stackexchange.com/a/47451/13684:
+    \AtBeginDocument{%
+        \def\PYZsq{\textquotesingle}% Upright quotes in Pygmentized code
+    }
+    \usepackage{upquote} % Upright quotes for verbatim code
+    \usepackage{eurosym} % defines \euro
+
+    \usepackage{iftex}
+    \ifPDFTeX
+        \usepackage[T1]{fontenc}
+        \IfFileExists{alphabeta.sty}{
+              \usepackage{alphabeta}
+          }{
+              \usepackage[mathletters]{ucs}
+              \usepackage[utf8x]{inputenc}
+          }
+    \else
+        \usepackage{fontspec}
+        \usepackage{unicode-math}
+    \fi
+
+    \usepackage{fancyvrb} % verbatim replacement that allows latex
+    \usepackage{grffile} % extends the file name processing of package graphics
+                         % to support a larger range
+    \makeatletter % fix for old versions of grffile with XeLaTeX
+    \@ifpackagelater{grffile}{2019/11/01}
+    {
+      % Do nothing on new versions
+    }
+    {
+      \def\Gread@@xetex#1{%
+        \IfFileExists{"\Gin@base".bb}%
+        {\Gread@eps{\Gin@base.bb}}%
+        {\Gread@@xetex@aux#1}%
+      }
+    }
+    \makeatother
+    \usepackage[Export]{adjustbox} % Used to constrain images to a maximum size
+    \adjustboxset{max size={0.9\linewidth}{0.9\paperheight}}
+
+    % The hyperref package gives us a pdf with properly built
+    % internal navigation ('pdf bookmarks' for the table of contents,
+    % internal cross-reference links, web links for URLs, etc.)
+    \usepackage{hyperref}
+    % The default LaTeX title has an obnoxious amount of whitespace. By default,
+    % titling removes some of it. It also provides customization options.
+    \usepackage{titling}
+    \usepackage{longtable} % longtable support required by pandoc >1.10
+    \usepackage{booktabs}  % table support for pandoc > 1.12.2
+    \usepackage{array}     % table support for pandoc >= 2.11.3
+    \usepackage{calc}      % table minipage width calculation for pandoc >= 2.11.1
+    \usepackage[inline]{enumitem} % IRkernel/repr support (it uses the enumerate* environment)
+    \usepackage[normalem]{ulem} % ulem is needed to support strikethroughs (\sout)
+                                % normalem makes italics be italics, not underlines
+    \usepackage{soul}      % strikethrough (\st) support for pandoc >= 3.0.0
+    \usepackage{mathrsfs}
+    
+
+    
+    % Colors for the hyperref package
+    \definecolor{urlcolor}{rgb}{0,.145,.698}
+    \definecolor{linkcolor}{rgb}{.71,0.21,0.01}
+    \definecolor{citecolor}{rgb}{.12,.54,.11}
+
+    % ANSI colors
+    \definecolor{ansi-black}{HTML}{3E424D}
+    \definecolor{ansi-black-intense}{HTML}{282C36}
+    \definecolor{ansi-red}{HTML}{E75C58}
+    \definecolor{ansi-red-intense}{HTML}{B22B31}
+    \definecolor{ansi-green}{HTML}{00A250}
+    \definecolor{ansi-green-intense}{HTML}{007427}
+    \definecolor{ansi-yellow}{HTML}{DDB62B}
+    \definecolor{ansi-yellow-intense}{HTML}{B27D12}
+    \definecolor{ansi-blue}{HTML}{208FFB}
+    \definecolor{ansi-blue-intense}{HTML}{0065CA}
+    \definecolor{ansi-magenta}{HTML}{D160C4}
+    \definecolor{ansi-magenta-intense}{HTML}{A03196}
+    \definecolor{ansi-cyan}{HTML}{60C6C8}
+    \definecolor{ansi-cyan-intense}{HTML}{258F8F}
+    \definecolor{ansi-white}{HTML}{C5C1B4}
+    \definecolor{ansi-white-intense}{HTML}{A1A6B2}
+    \definecolor{ansi-default-inverse-fg}{HTML}{FFFFFF}
+    \definecolor{ansi-default-inverse-bg}{HTML}{000000}
+
+    % common color for the border for error outputs.
+    \definecolor{outerrorbackground}{HTML}{FFDFDF}
+
+    % commands and environments needed by pandoc snippets
+    % extracted from the output of `pandoc -s`
+    \providecommand{\tightlist}{%
+      \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+    \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+    % Add ',fontsize=\small' for more characters per line
+    \newenvironment{Shaded}{}{}
+    \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
+    \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
+    \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
+    \newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
+    \newcommand{\RegionMarkerTok}[1]{{#1}}
+    \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\NormalTok}[1]{{#1}}
+
+    % Additional commands for more recent versions of Pandoc
+    \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{{#1}}}
+    \newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{{#1}}}
+    \newcommand{\ImportTok}[1]{{#1}}
+    \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{{#1}}}}
+    \newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{{#1}}}
+    \newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{{#1}}}
+    \newcommand{\BuiltInTok}[1]{{#1}}
+    \newcommand{\ExtensionTok}[1]{{#1}}
+    \newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{{#1}}}
+    \newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{{#1}}}
+    \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+
+
+    % Define a nice break command that doesn't care if a line doesn't already
+    % exist.
+    \def\br{\hspace*{\fill} \\* }
+    % Math Jax compatibility definitions
+    \def\gt{>}
+    \def\lt{<}
+    \let\Oldtex\TeX
+    \let\Oldlatex\LaTeX
+    \renewcommand{\TeX}{\textrm{\Oldtex}}
+    \renewcommand{\LaTeX}{\textrm{\Oldlatex}}
+    % Document parameters
+    % Document title
+    \title{data\_eda}
+    
+    
+    
+    
+    
+    
+    
+% Pygments definitions
+\makeatletter
+\def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
+    \let\PY@ul=\relax \let\PY@tc=\relax%
+    \let\PY@bc=\relax \let\PY@ff=\relax}
+\def\PY@tok#1{\csname PY@tok@#1\endcsname}
+\def\PY@toks#1+{\ifx\relax#1\empty\else%
+    \PY@tok{#1}\expandafter\PY@toks\fi}
+\def\PY@do#1{\PY@bc{\PY@tc{\PY@ul{%
+    \PY@it{\PY@bf{\PY@ff{#1}}}}}}}
+\def\PY#1#2{\PY@reset\PY@toks#1+\relax+\PY@do{#2}}
+
+\@namedef{PY@tok@w}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
+\@namedef{PY@tok@c}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cp}{\def\PY@tc##1{\textcolor[rgb]{0.61,0.40,0.00}{##1}}}
+\@namedef{PY@tok@k}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kp}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kt}{\def\PY@tc##1{\textcolor[rgb]{0.69,0.00,0.25}{##1}}}
+\@namedef{PY@tok@o}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@ow}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\@namedef{PY@tok@nb}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@nf}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@nc}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@nn}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@ne}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.80,0.25,0.22}{##1}}}
+\@namedef{PY@tok@nv}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@no}{\def\PY@tc##1{\textcolor[rgb]{0.53,0.00,0.00}{##1}}}
+\@namedef{PY@tok@nl}{\def\PY@tc##1{\textcolor[rgb]{0.46,0.46,0.00}{##1}}}
+\@namedef{PY@tok@ni}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.44,0.44,0.44}{##1}}}
+\@namedef{PY@tok@na}{\def\PY@tc##1{\textcolor[rgb]{0.41,0.47,0.13}{##1}}}
+\@namedef{PY@tok@nt}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@nd}{\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\@namedef{PY@tok@s}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sd}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@si}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.64,0.35,0.47}{##1}}}
+\@namedef{PY@tok@se}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.36,0.12}{##1}}}
+\@namedef{PY@tok@sr}{\def\PY@tc##1{\textcolor[rgb]{0.64,0.35,0.47}{##1}}}
+\@namedef{PY@tok@ss}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@sx}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@m}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@gh}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\@namedef{PY@tok@gu}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
+\@namedef{PY@tok@gd}{\def\PY@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
+\@namedef{PY@tok@gi}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.52,0.00}{##1}}}
+\@namedef{PY@tok@gr}{\def\PY@tc##1{\textcolor[rgb]{0.89,0.00,0.00}{##1}}}
+\@namedef{PY@tok@ge}{\let\PY@it=\textit}
+\@namedef{PY@tok@gs}{\let\PY@bf=\textbf}
+\@namedef{PY@tok@gp}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\@namedef{PY@tok@go}{\def\PY@tc##1{\textcolor[rgb]{0.44,0.44,0.44}{##1}}}
+\@namedef{PY@tok@gt}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
+\@namedef{PY@tok@err}{\def\PY@bc##1{{\setlength{\fboxsep}{\string -\fboxrule}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}}
+\@namedef{PY@tok@kc}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kd}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kn}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kr}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@bp}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@fm}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@vc}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vg}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vi}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vm}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@sa}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sb}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sc}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@dl}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@s2}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sh}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@s1}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@mb}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mf}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mh}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mi}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@il}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mo}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@ch}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cm}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cpf}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@c1}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cs}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+
+\def\PYZbs{\char`\\}
+\def\PYZus{\char`\_}
+\def\PYZob{\char`\{}
+\def\PYZcb{\char`\}}
+\def\PYZca{\char`\^}
+\def\PYZam{\char`\&}
+\def\PYZlt{\char`\<}
+\def\PYZgt{\char`\>}
+\def\PYZsh{\char`\#}
+\def\PYZpc{\char`\%}
+\def\PYZdl{\char`\$}
+\def\PYZhy{\char`\-}
+\def\PYZsq{\char`\'}
+\def\PYZdq{\char`\"}
+\def\PYZti{\char`\~}
+% for compatibility with earlier versions
+\def\PYZat{@}
+\def\PYZlb{[}
+\def\PYZrb{]}
+\makeatother
+
+
+    % For linebreaks inside Verbatim environment from package fancyvrb.
+    \makeatletter
+        \newbox\Wrappedcontinuationbox
+        \newbox\Wrappedvisiblespacebox
+        \newcommand*\Wrappedvisiblespace {\textcolor{red}{\textvisiblespace}}
+        \newcommand*\Wrappedcontinuationsymbol {\textcolor{red}{\llap{\tiny$\m@th\hookrightarrow$}}}
+        \newcommand*\Wrappedcontinuationindent {3ex }
+        \newcommand*\Wrappedafterbreak {\kern\Wrappedcontinuationindent\copy\Wrappedcontinuationbox}
+        % Take advantage of the already applied Pygments mark-up to insert
+        % potential linebreaks for TeX processing.
+        %        {, <, #, %, $, ' and ": go to next line.
+        %        _, }, ^, &, >, - and ~: stay at end of broken line.
+        % Use of \textquotesingle for straight quote.
+        \newcommand*\Wrappedbreaksatspecials {%
+            \def\PYGZus{\discretionary{\char`\_}{\Wrappedafterbreak}{\char`\_}}%
+            \def\PYGZob{\discretionary{}{\Wrappedafterbreak\char`\{}{\char`\{}}%
+            \def\PYGZcb{\discretionary{\char`\}}{\Wrappedafterbreak}{\char`\}}}%
+            \def\PYGZca{\discretionary{\char`\^}{\Wrappedafterbreak}{\char`\^}}%
+            \def\PYGZam{\discretionary{\char`\&}{\Wrappedafterbreak}{\char`\&}}%
+            \def\PYGZlt{\discretionary{}{\Wrappedafterbreak\char`\<}{\char`\<}}%
+            \def\PYGZgt{\discretionary{\char`\>}{\Wrappedafterbreak}{\char`\>}}%
+            \def\PYGZsh{\discretionary{}{\Wrappedafterbreak\char`\#}{\char`\#}}%
+            \def\PYGZpc{\discretionary{}{\Wrappedafterbreak\char`\%}{\char`\%}}%
+            \def\PYGZdl{\discretionary{}{\Wrappedafterbreak\char`\$}{\char`\$}}%
+            \def\PYGZhy{\discretionary{\char`\-}{\Wrappedafterbreak}{\char`\-}}%
+            \def\PYGZsq{\discretionary{}{\Wrappedafterbreak\textquotesingle}{\textquotesingle}}%
+            \def\PYGZdq{\discretionary{}{\Wrappedafterbreak\char`\"}{\char`\"}}%
+            \def\PYGZti{\discretionary{\char`\~}{\Wrappedafterbreak}{\char`\~}}%
+        }
+        % Some characters . , ; ? ! / are not pygmentized.
+        % This macro makes them "active" and they will insert potential linebreaks
+        \newcommand*\Wrappedbreaksatpunct {%
+            \lccode`\~`\.\lowercase{\def~}{\discretionary{\hbox{\char`\.}}{\Wrappedafterbreak}{\hbox{\char`\.}}}%
+            \lccode`\~`\,\lowercase{\def~}{\discretionary{\hbox{\char`\,}}{\Wrappedafterbreak}{\hbox{\char`\,}}}%
+            \lccode`\~`\;\lowercase{\def~}{\discretionary{\hbox{\char`\;}}{\Wrappedafterbreak}{\hbox{\char`\;}}}%
+            \lccode`\~`\:\lowercase{\def~}{\discretionary{\hbox{\char`\:}}{\Wrappedafterbreak}{\hbox{\char`\:}}}%
+            \lccode`\~`\?\lowercase{\def~}{\discretionary{\hbox{\char`\?}}{\Wrappedafterbreak}{\hbox{\char`\?}}}%
+            \lccode`\~`\!\lowercase{\def~}{\discretionary{\hbox{\char`\!}}{\Wrappedafterbreak}{\hbox{\char`\!}}}%
+            \lccode`\~`\/\lowercase{\def~}{\discretionary{\hbox{\char`\/}}{\Wrappedafterbreak}{\hbox{\char`\/}}}%
+            \catcode`\.\active
+            \catcode`\,\active
+            \catcode`\;\active
+            \catcode`\:\active
+            \catcode`\?\active
+            \catcode`\!\active
+            \catcode`\/\active
+            \lccode`\~`\~
+        }
+    \makeatother
+
+    \let\OriginalVerbatim=\Verbatim
+    \makeatletter
+    \renewcommand{\Verbatim}[1][1]{%
+        %\parskip\z@skip
+        \sbox\Wrappedcontinuationbox {\Wrappedcontinuationsymbol}%
+        \sbox\Wrappedvisiblespacebox {\FV@SetupFont\Wrappedvisiblespace}%
+        \def\FancyVerbFormatLine ##1{\hsize\linewidth
+            \vtop{\raggedright\hyphenpenalty\z@\exhyphenpenalty\z@
+                \doublehyphendemerits\z@\finalhyphendemerits\z@
+                \strut ##1\strut}%
+        }%
+        % If the linebreak is at a space, the latter will be displayed as visible
+        % space at end of first line, and a continuation symbol starts next line.
+        % Stretch/shrink are however usually zero for typewriter font.
+        \def\FV@Space {%
+            \nobreak\hskip\z@ plus\fontdimen3\font minus\fontdimen4\font
+            \discretionary{\copy\Wrappedvisiblespacebox}{\Wrappedafterbreak}
+            {\kern\fontdimen2\font}%
+        }%
+
+        % Allow breaks at special characters using \PYG... macros.
+        \Wrappedbreaksatspecials
+        % Breaks at punctuation characters . , ; ? ! and / need catcode=\active
+        \OriginalVerbatim[#1,codes*=\Wrappedbreaksatpunct]%
+    }
+    \makeatother
+
+    % Exact colors from NB
+    \definecolor{incolor}{HTML}{303F9F}
+    \definecolor{outcolor}{HTML}{D84315}
+    \definecolor{cellborder}{HTML}{CFCFCF}
+    \definecolor{cellbackground}{HTML}{F7F7F7}
+
+    % prompt
+    \makeatletter
+    \newcommand{\boxspacing}{\kern\kvtcb@left@rule\kern\kvtcb@boxsep}
+    \makeatother
+    \newcommand{\prompt}[4]{
+        {\ttfamily\llap{{\color{#2}[#3]:\hspace{3pt}#4}}\vspace{-\baselineskip}}
+    }
+    
+
+    
+    % Prevent overflowing lines due to hard-to-break entities
+    \sloppy
+    % Setup hyperref package
+    \hypersetup{
+      breaklinks=true,  % so long urls are correctly broken across lines
+      colorlinks=true,
+      urlcolor=urlcolor,
+      linkcolor=linkcolor,
+      citecolor=citecolor,
+      }
+    % Slightly bigger margins than the latex defaults
+    
+    \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+    
+    
+
+\begin{document}
+    
+    \maketitle
+    
+    
+
+    
+    \section{Exploratory Data Analysis -
+Data}\label{exploratory-data-analysis---data}
+
+    4 types of data are provided: 1. Ticket Sales Data - sales data from the
+tickets purchased and scanned at the United Center 2. Email Engagement
+Data - these contain information about interactions attendees have with
+the emails sent before and after the game. * KBYG - know before you go
+emails are the pre-game emails * Postgame - postgame emails sent after
+the game 3. LiveA Demographic Data - 3rd Party Provider data to augment
+with ticket sales and email engagment data to profile individuals with
+demographic characteristics 4. Bulls Theme + Giveaway Schedule -
+schedule of promotional activity for each game.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{1}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{import} \PY{n+nn}{pandas} \PY{k}{as} \PY{n+nn}{pd}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \subsection{Ticket Sales}\label{ticket-sales}
+
+    The ticket sales data represents instances of tickets redeemed at the
+United Center for Chicago Bulls home games.
+
+We will rename the columns to make them more code friendly. Find the
+data dictionary below.
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.1292}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.2967}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.2967}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.2201}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.0574}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Variable Name
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Code Friendly Name
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Description
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Detail
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Field Type
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Event Information & & & & \\
+Season Name & season\_name & Indicates the NBA season that each event
+occurred within & NBA season runs from October to April & CHARACTER \\
+Event Date & event\_date & The date of the game the tickets were
+purchased for & & DATE \\
+Event Weekday & event\_weekday & The day of the week of each game & &
+CHARACTER \\
+Opponent (Short) & opponent\_short & The nickname of the opposing team
+the Bulls played & Ex. - Lakers, Pelicans (city/geographic location
+excluded) & CHARACTER \\
+Ticket Purchase Information & & & & \\
+Parent Ticket Categories & parent\_ticket\_categories & Indicates the
+type of ticket being purchased & Group = group purchases\nIndividual:
+Resale Buyer\nPackage = Subscription & CHARACTER \\
+Add Date & add\_date & The date on which the tickets were purchased
+and/or added to & & DATE \\
+Days before Event & days\_before\_event & The number of days in advance
+of the event that the ticket was purchased & Date difference calculation
+between Add Date and Event Date & INTEGER \\
+Purchaser Email & purchaser\_email & The email contact associated with
+the purchase record & & CHARACTER \\
+Total Seats & total\_seats & The total number of seats purchased in this
+specific transaction & & INTEGER \\
+Seat Location & seat\_location & Indicates the level of the United
+Center where the seats are located & 100 Level = lower bowl of seats,
+sections all around the arena & CHARACTER \\
+Seat Level & seat\_level & Indicates the level of the United Center
+where the seats are located & Lower Level = 100 Level (open to all
+fans)\nClub Level = 200 and 300 levels, requires specific ticket access
+& CHARACTER \\
+Attendance Information & & & & \\
+Arrival Time & arrival\_time & Indicates the datetime that the attendee
+scanned their ticket at the gate & Blank = Un-scanned ticket (indicates
+a ticket that was sold but not used) & DATETIME \\
+Attendee Email & attendee\_email & The email contact associated with the
+attendee & & CHARACTER \\
+Attendee Zip Code & attebdee\_zip\_code & The zip code of the address
+associated with the attendee & & INTEGER \\
+Mobile Scan & mobile\_scan & Indicates whether the ticket was scanned
+using a mobile device & 1 = Mobile scan\n0 = Non-mobile scan\nBlank =
+Un-scanned & BINARY \\
+Scan Category & scan\_category & Indicates the method the attendee used
+to access the event & & CHARACTER \\
+\end{longtable}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{2}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Load data from CSV file}
+\PY{n}{df\PYZus{}tickets} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}csv}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{/Users/jm/dev/acl\PYZus{}spring\PYZus{}24\PYZus{}bulls2/data/raw/Ticket Sales Data/22\PYZhy{}23 \PYZam{} 23\PYZhy{}24 (through 3.14) Ticket Sales Data.csv}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} 
+                      \PY{n}{names} \PY{o}{=} \PY{p}{[}
+                        \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{season\PYZus{}name}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{event\PYZus{}date}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{event\PYZus{}weekday}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{opponent\PYZus{}short}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+                        \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{parent\PYZus{}ticket\PYZus{}categories}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{add\PYZus{}date}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{days\PYZus{}before\PYZus{}event}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+                        \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{purchaser\PYZus{}email}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{total\PYZus{}seats}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{seat\PYZus{}location}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{seat\PYZus{}level}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+                        \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{arrival\PYZus{}time}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{attendee\PYZus{}email}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{attendee\PYZus{}zip\PYZus{}code}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{mobile\PYZus{}scan}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+                        \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{scan\PYZus{}category}\PY{l+s+s1}{\PYZsq{}}
+                    \PY{p}{]}\PY{p}{,}
+                    \PY{n}{header} \PY{o}{=} \PY{l+m+mi}{0}
+                \PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    The data needs to be adjusted to reflect the data types specified in the
+data dictionary.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{3}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Fix Date Data Types}
+\PY{n}{df\PYZus{}tickets}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{event\PYZus{}date}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{to\PYZus{}datetime}\PY{p}{(}\PY{n}{df\PYZus{}tickets}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{event\PYZus{}date}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,} \PY{n+nb}{format} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+si}{\PYZpc{}d}\PY{l+s+s2}{\PYZhy{}}\PY{l+s+s2}{\PYZpc{}}\PY{l+s+s2}{b\PYZhy{}}\PY{l+s+s2}{\PYZpc{}}\PY{l+s+s2}{y}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{df\PYZus{}tickets}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{add\PYZus{}date}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{to\PYZus{}datetime}\PY{p}{(}\PY{n}{df\PYZus{}tickets}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{add\PYZus{}date}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,} \PY{n+nb}{format} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+si}{\PYZpc{}d}\PY{l+s+s2}{\PYZhy{}}\PY{l+s+s2}{\PYZpc{}}\PY{l+s+s2}{b\PYZhy{}}\PY{l+s+s2}{\PYZpc{}}\PY{l+s+s2}{y}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{df\PYZus{}tickets}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{arrival\PYZus{}time}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{to\PYZus{}datetime}\PY{p}{(}\PY{n}{df\PYZus{}tickets}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{arrival\PYZus{}time}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,} \PY{n+nb}{format} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZpc{}}\PY{l+s+s2}{m/}\PY{l+s+si}{\PYZpc{}d}\PY{l+s+s2}{/}\PY{l+s+s2}{\PYZpc{}}\PY{l+s+s2}{y }\PY{l+s+s2}{\PYZpc{}}\PY{l+s+s2}{H:}\PY{l+s+s2}{\PYZpc{}}\PY{l+s+s2}{M}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Convert mobile\PYZus{}scan to a boolean}
+\PY{n}{df\PYZus{}tickets}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{mobile\PYZus{}scan}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{df\PYZus{}tickets}\PY{o}{.}\PY{n}{mobile\PYZus{}scan}\PY{o}{.}\PY{n}{astype}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{bool}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    Filter to just the season ticket holders using the
+`parent\_ticket\_categories' variable.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{4}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df\PYZus{}season} \PY{o}{=} \PY{n}{df\PYZus{}tickets}\PY{p}{[}\PY{n}{df\PYZus{}tickets}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{parent\PYZus{}ticket\PYZus{}categories}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{==} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Season}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{5}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df\PYZus{}season}\PY{o}{.}\PY{n}{info}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+<class 'pandas.core.frame.DataFrame'>
+Index: 270086 entries, 300179 to 570264
+Data columns (total 16 columns):
+ \#   Column                    Non-Null Count   Dtype
+---  ------                    --------------   -----
+ 0   season\_name               270086 non-null  object
+ 1   event\_date                270086 non-null  datetime64[ns]
+ 2   event\_weekday             270086 non-null  object
+ 3   opponent\_short            270086 non-null  object
+ 4   parent\_ticket\_categories  270086 non-null  object
+ 5   add\_date                  270086 non-null  datetime64[ns]
+ 6   days\_before\_event         270086 non-null  int64
+ 7   purchaser\_email           268908 non-null  object
+ 8   total\_seats               270086 non-null  int64
+ 9   seat\_location             270086 non-null  object
+ 10  seat\_level                270086 non-null  object
+ 11  arrival\_time              237206 non-null  datetime64[ns]
+ 12  attendee\_email            236956 non-null  object
+ 13  attendee\_zip\_code         201700 non-null  object
+ 14  mobile\_scan               270086 non-null  bool
+ 15  scan\_category             270086 non-null  object
+dtypes: bool(1), datetime64[ns](3), int64(2), object(10)
+memory usage: 33.2+ MB
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{6}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df\PYZus{}season}\PY{o}{.}\PY{n}{describe}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{6}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+                          event\_date                       add\_date  \textbackslash{}
+count                         270086                         270086
+mean   2023-05-30 20:20:41.311286016  2022-09-15 19:45:03.112341760
+min              2022-10-04 00:00:00            2022-01-28 00:00:00
+25\%              2022-12-28 00:00:00            2022-01-28 00:00:00
+50\%              2023-03-17 00:00:00            2022-08-17 00:00:00
+75\%              2023-12-02 00:00:00            2023-02-01 00:00:00
+max              2024-03-14 00:00:00            2024-03-14 00:00:00
+std                              NaN                            NaN
+
+       days\_before\_event    total\_seats                   arrival\_time
+count      270086.000000  270086.000000                         237206
+mean          257.024748       1.991147  2023-06-01 06:09:33.202279424
+min           -61.000000       1.000000            2022-10-04 18:36:00
+25\%           177.000000       1.000000            2022-12-30 17:31:00
+50\%           269.000000       2.000000            2023-03-17 18:38:00
+75\%           336.000000       2.000000            2023-12-02 18:47:00
+max           436.000000      14.000000            2024-03-14 20:52:00
+std           101.241811       0.899302                            NaN
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{7}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df\PYZus{}season}\PY{o}{.}\PY{n}{describe}\PY{p}{(}\PY{n}{include}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{O}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{7}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+                    season\_name event\_weekday opponent\_short  \textbackslash{}
+count                    270086        270086         270086
+unique                        2             7             29
+top     2022-2023 Chicago Bulls           Wed          Bucks
+freq                     159078         58950          16972
+
+       parent\_ticket\_categories             purchaser\_email     seat\_location  \textbackslash{}
+count                    270086                      268908            270086
+unique                        1                        3891                 6
+top                      Season  michaelsblechman@gmail.com  100 Level Center
+freq                     270086                         527             77916
+
+         seat\_level              attendee\_email attendee\_zip\_code  \textbackslash{}
+count        270086                      236956            201700
+unique            5                      116211             14895
+top     Lower Level  michaelsblechman@gmail.com             60614
+freq         122890                         279              4939
+
+       scan\_category
+count         270086
+unique             5
+top      Web Browser
+freq          146121
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \subsubsection{Ticket Sales Data
+Summary}\label{ticket-sales-data-summary}
+
+There are 270,068 season ticket purchasers that were scanned at Chicago
+Bulls games at the United Center over the 2022-2023 season and 2023-2024
+(through March 19th) season. The data contains 15 columns.
+
+There are missing values in the \texttt{purchaser\_email},
+\texttt{attendee\_email}, \texttt{arrival\_time}, and
+\texttt{attendee\_zip\_code} columns.
+
+    
+
+    \subsection{Email Engagement Data}\label{email-engagement-data}
+
+    The email engagment data is broken into two files corresponding to the
+pre-game and post-game email schedule. One email is sent before every
+Chicago Bulls game and another is sent after every game. The data
+collected in both of these files represents the clickthrough data for
+both types of email sent. Both files contain data for both the '22 - '23
+season and '23 - '24 season.
+
+Everytime an attendee clicks a link on one of these emails a row is
+entered.
+
+The two types of email engagment data are: 1. KBYG - Know Before You Go:
+these emails are sent before the game to ticket holders with pre-game
+instructions. Usually sent the same day. 2. Post-Game: These emails are
+sent after the game with promotional material.
+
+\subsubsection{Email - Data Dictionary}\label{email---data-dictionary}
+
+We will rename the columns to make them more code friendly. Find the
+data dictionary below.
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.2039}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.1513}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.4145}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.1513}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.0789}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Variable Name
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Code Friendly Name
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Description
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Detail
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Field Type
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Email Address & attendee\_email & email of the attendee of the game & &
+CHARACTER \\
+Clickthrough Link & clickthrough\_url & clickthrough link/URL & &
+CHARACTER \\
+Email Clickthrough Date/Time & clickthrough\_dt & clickthrough date and
+time & & DATE \\
+Email Name & email\_name & name of the email sent out & & CHARACTER \\
+Total Clickthroughs & total\_clickthroughs & total count of click
+throughs & & INTEGER \\
+Email Send Date & email\_send\_dt & date and time the email was sent & &
+DATE \\
+Unique Clickthroughs & unique\_clickthroughs & the number of unique
+clickthroughs & & INTEGER \\
+Clickthrough Link Count & clickthrough\_link\_count & ???? & &
+INTEGER \\
+Season & season & the season & & CHARACTER \\
+& email\_type & the type of email: kbyg or post & & CHARACTER \\
+\end{longtable}
+
+Since both data sets follow the same data structure we will concatenate
+the datasets. We have also added in a column to denote which type of
+email is sent.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{8}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Load data from CSV file}
+\PY{c+c1}{\PYZsh{}Email Address,  Clickthrough Link,  Email Clickthrough Date/Time,  Email Name,Total Clickthroughs,Email Send Date,Unique Clickthroughs,Clickthrough Link Count,Season}
+
+\PY{n}{df\PYZus{}kbyg} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}csv}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{/Users/jm/dev/acl\PYZus{}spring\PYZus{}24\PYZus{}bulls2/data/raw/Email Engagement Data/KBYG Clickthrough Data\PYZus{}2223 and 2324 Seasons.csv}\PY{l+s+s2}{\PYZdq{}}
+                 \PY{p}{,} 
+                      \PY{n}{names} \PY{o}{=} \PY{p}{[}
+                        \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{attendee\PYZus{}email}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{clickthrough\PYZus{}url}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{clickthrough\PYZus{}dt}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+                        \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{email\PYZus{}name}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{total\PYZus{}clickthroughs}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{email\PYZus{}send\PYZus{}dt}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+                        \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{unique\PYZus{}clickthroughs}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{clickthrough\PYZus{}link\PYZus{}count}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{season}\PY{l+s+s1}{\PYZsq{}}
+                    \PY{p}{]}\PY{p}{,}
+                    \PY{n}{header} \PY{o}{=} \PY{l+m+mi}{0}
+                \PY{p}{)}
+\PY{n}{df\PYZus{}kbyg}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{email\PYZus{}type}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{kbyg}\PY{l+s+s1}{\PYZsq{}}
+
+\PY{n}{df\PYZus{}post} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}csv}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{/Users/jm/dev/acl\PYZus{}spring\PYZus{}24\PYZus{}bulls2/data/raw/Email Engagement Data/Postgame Email Clickthrough\PYZus{}2223 and 2324 seasons.csv}\PY{l+s+s2}{\PYZdq{}}
+                 \PY{p}{,} 
+                      \PY{n}{names} \PY{o}{=} \PY{p}{[}
+                        \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{attendee\PYZus{}email}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{clickthrough\PYZus{}url}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{clickthrough\PYZus{}dt}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+                        \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{email\PYZus{}name}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{total\PYZus{}clickthroughs}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{email\PYZus{}send\PYZus{}dt}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+                        \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{unique\PYZus{}clickthroughs}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{clickthrough\PYZus{}link\PYZus{}count}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{season}\PY{l+s+s1}{\PYZsq{}}
+                    \PY{p}{]}\PY{p}{,}
+                    \PY{n}{header} \PY{o}{=} \PY{l+m+mi}{0}
+                \PY{p}{)}
+\PY{n}{df\PYZus{}post}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{email\PYZus{}type}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{post}\PY{l+s+s1}{\PYZsq{}}
+
+\PY{n}{df\PYZus{}emails} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{concat}\PY{p}{(}\PY{p}{[}\PY{n}{df\PYZus{}kbyg}\PY{p}{,} \PY{n}{df\PYZus{}post}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{9}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Fix Date Data Types}
+\PY{n}{df\PYZus{}emails}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{clickthrough\PYZus{}dt}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{to\PYZus{}datetime}\PY{p}{(}\PY{n}{df\PYZus{}emails}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{clickthrough\PYZus{}dt}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,} \PY{n+nb}{format} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZpc{}}\PY{l+s+s2}{m/}\PY{l+s+si}{\PYZpc{}d}\PY{l+s+s2}{/}\PY{l+s+s2}{\PYZpc{}}\PY{l+s+s2}{Y }\PY{l+s+s2}{\PYZpc{}}\PY{l+s+s2}{H:}\PY{l+s+s2}{\PYZpc{}}\PY{l+s+s2}{M}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{df\PYZus{}emails}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{email\PYZus{}send\PYZus{}dt}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{to\PYZus{}datetime}\PY{p}{(}\PY{n}{df\PYZus{}emails}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{email\PYZus{}send\PYZus{}dt}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,} \PY{n+nb}{format} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZpc{}}\PY{l+s+s2}{m/}\PY{l+s+si}{\PYZpc{}d}\PY{l+s+s2}{/}\PY{l+s+s2}{\PYZpc{}}\PY{l+s+s2}{Y }\PY{l+s+s2}{\PYZpc{}}\PY{l+s+s2}{H:}\PY{l+s+s2}{\PYZpc{}}\PY{l+s+s2}{M}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{10}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df\PYZus{}emails}\PY{o}{.}\PY{n}{info}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+<class 'pandas.core.frame.DataFrame'>
+Index: 37613 entries, 0 to 23382
+Data columns (total 10 columns):
+ \#   Column                   Non-Null Count  Dtype
+---  ------                   --------------  -----
+ 0   attendee\_email           37613 non-null  object
+ 1   clickthrough\_url         37613 non-null  object
+ 2   clickthrough\_dt          37613 non-null  datetime64[ns]
+ 3   email\_name               37613 non-null  object
+ 4   total\_clickthroughs      37613 non-null  int64
+ 5   email\_send\_dt            37613 non-null  datetime64[ns]
+ 6   unique\_clickthroughs     37613 non-null  int64
+ 7   clickthrough\_link\_count  37613 non-null  int64
+ 8   season                   37613 non-null  int64
+ 9   email\_type               37613 non-null  object
+dtypes: datetime64[ns](2), int64(4), object(4)
+memory usage: 3.2+ MB
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{11}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df\PYZus{}emails}\PY{o}{.}\PY{n}{describe}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{11}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+                     clickthrough\_dt  total\_clickthroughs  \textbackslash{}
+count                          37613         37613.000000
+mean   2023-07-09 01:27:44.730811392             1.000239
+min              2022-10-22 16:13:00             1.000000
+25\%              2023-01-14 15:22:00             1.000000
+50\%              2023-04-10 16:38:00             1.000000
+75\%              2023-12-31 13:07:00             1.000000
+max              2024-03-20 12:16:00             2.000000
+std                              NaN             0.015467
+
+                       email\_send\_dt  unique\_clickthroughs  \textbackslash{}
+count                          37613               37613.0
+mean   2023-07-08 09:45:42.328450304                   1.0
+min              2022-10-22 16:00:00                   1.0
+25\%              2023-01-14 14:00:00                   1.0
+50\%              2023-04-10 13:00:00                   1.0
+75\%              2023-12-30 16:00:00                   1.0
+max              2024-03-19 12:00:00                   1.0
+std                              NaN                   0.0
+
+       clickthrough\_link\_count        season
+count             37613.000000  37613.000000
+mean                  1.000239   2272.918645
+min                   1.000000   2223.000000
+25\%                   1.000000   2223.000000
+50\%                   1.000000   2223.000000
+75\%                   1.000000   2324.000000
+max                   2.000000   2324.000000
+std                   0.015467     50.497325
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{12}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df\PYZus{}emails}\PY{o}{.}\PY{n}{describe}\PY{p}{(}\PY{n}{include}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{O}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{12}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+               attendee\_email  \textbackslash{}
+count                   37613
+unique                  25295
+top     lzerante@corpconc.com
+freq                       95
+
+                                         clickthrough\_url  \textbackslash{}
+count                                               37613
+unique                                                 47
+top     https://bulls.qualtrics.com/jfe/form/SV\_cNsSkl{\ldots}
+freq                                                10731
+
+                                email\_name email\_type
+count                                37613      37613
+unique                                 120          2
+top     2023\_CB\_Marketing\_Surveys\_PostGame       post
+freq                                 11399      23383
+\end{Verbatim}
+\end{tcolorbox}
+        
+    Now we have to filter for just those emails that correspond to season
+ticket holders from the tickets data.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{13}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df\PYZus{}season\PYZus{}emails} \PY{o}{=} \PY{n}{df\PYZus{}emails}\PY{p}{[}\PY{n}{df\PYZus{}emails}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{attendee\PYZus{}email}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{isin}\PY{p}{(}\PY{n}{df\PYZus{}season}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{attendee\PYZus{}email}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{unique}\PY{p}{(}\PY{p}{)}\PY{p}{)}\PY{p}{]}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{14}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df\PYZus{}season\PYZus{}emails}\PY{o}{.}\PY{n}{info}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+<class 'pandas.core.frame.DataFrame'>
+Index: 8158 entries, 1 to 23372
+Data columns (total 10 columns):
+ \#   Column                   Non-Null Count  Dtype
+---  ------                   --------------  -----
+ 0   attendee\_email           8158 non-null   object
+ 1   clickthrough\_url         8158 non-null   object
+ 2   clickthrough\_dt          8158 non-null   datetime64[ns]
+ 3   email\_name               8158 non-null   object
+ 4   total\_clickthroughs      8158 non-null   int64
+ 5   email\_send\_dt            8158 non-null   datetime64[ns]
+ 6   unique\_clickthroughs     8158 non-null   int64
+ 7   clickthrough\_link\_count  8158 non-null   int64
+ 8   season                   8158 non-null   int64
+ 9   email\_type               8158 non-null   object
+dtypes: datetime64[ns](2), int64(4), object(4)
+memory usage: 701.1+ KB
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{15}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df\PYZus{}season\PYZus{}emails}\PY{o}{.}\PY{n}{describe}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{15}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+                     clickthrough\_dt  total\_clickthroughs  \textbackslash{}
+count                           8158          8158.000000
+mean   2023-06-25 18:07:12.378033920             1.000490
+min              2022-10-22 16:13:00             1.000000
+25\%              2023-01-01 10:40:30             1.000000
+50\%              2023-04-02 17:54:30             1.000000
+75\%              2024-01-01 14:05:30             1.000000
+max              2024-03-20 03:23:00             2.000000
+std                              NaN             0.022139
+
+                       email\_send\_dt  unique\_clickthroughs  \textbackslash{}
+count                           8158                8158.0
+mean   2023-06-25 01:19:15.724442368                   1.0
+min              2022-10-22 16:00:00                   1.0
+25\%              2022-12-31 14:00:00                   1.0
+50\%              2023-04-02 12:00:00                   1.0
+75\%              2023-12-31 13:00:00                   1.0
+max              2024-03-19 12:00:00                   1.0
+std                              NaN                   0.0
+
+       clickthrough\_link\_count       season
+count              8158.000000  8158.000000
+mean                  1.000490  2270.305835
+min                   1.000000  2223.000000
+25\%                   1.000000  2223.000000
+50\%                   1.000000  2223.000000
+75\%                   1.000000  2324.000000
+max                   2.000000  2324.000000
+std                   0.022139    50.401971
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{16}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df\PYZus{}season\PYZus{}emails}\PY{o}{.}\PY{n}{describe}\PY{p}{(}\PY{n}{include}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{O}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{16}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+               attendee\_email  \textbackslash{}
+count                    8158
+unique                   4776
+top     mephgrave@bacardi.com
+freq                       44
+
+                                         clickthrough\_url  \textbackslash{}
+count                                                8158
+unique                                                 46
+top     https://bulls.qualtrics.com/jfe/form/SV\_cNsSkl{\ldots}
+freq                                                 1570
+
+                                email\_name email\_type
+count                                 8158       8158
+unique                                 119          2
+top     2023\_CB\_Marketing\_Surveys\_PostGame       kbyg
+freq                                  1282       5143
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \subsubsection{Email Engagement Data
+Summary}\label{email-engagement-data-summary}
+
+There are 8,158 email clickthroughs by season ticket holder game
+attendees. This is a drop off from the 37K total email interactions.
+There are no nulls. The \texttt{unique\_clickthroughs} columns is
+useless since all values indicate a clickthrough event occured and
+therefore is always equal to 1.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{17}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Percentage of attendees that are season ticket holders: }\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n+nb}{len}\PY{p}{(}\PY{n}{df\PYZus{}season}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{attendee\PYZus{}email}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{unique}\PY{p}{(}\PY{p}{)}\PY{p}{)}\PY{o}{/}\PY{n+nb}{len}\PY{p}{(}\PY{n}{df\PYZus{}tickets}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{attendee\PYZus{}email}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{unique}\PY{p}{(}\PY{p}{)}\PY{p}{)}\PY{o}{*}\PY{l+m+mi}{100}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZpc{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Percentage of email clickthroughs (engagement) made by season ticket holders: }\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n+nb}{len}\PY{p}{(}\PY{n}{df\PYZus{}season\PYZus{}emails}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{attendee\PYZus{}email}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{unique}\PY{p}{(}\PY{p}{)}\PY{p}{)}\PY{o}{/}\PY{n+nb}{len}\PY{p}{(}\PY{n}{df\PYZus{}emails}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{attendee\PYZus{}email}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{unique}\PY{p}{(}\PY{p}{)}\PY{p}{)}\PY{o}{*}\PY{l+m+mi}{100}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZpc{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Percentage of attendees that are season ticket holders:  37.113257198334225 \%
+Percentage of email clickthroughs (engagement) made by season ticket holders:
+18.881201818541214 \%
+    \end{Verbatim}
+
+    \textbf{Interesting Fact}
+
+While season ticket holders make up 37\% of all gameday scans, they only
+make up 18.8\% of the email engagement either before or after the game.
+This may point to an opportunity to increase season ticket holder
+engagement since they seem to engage less than their fair share.
+
+The response variable we intend to use will be based on this data. We
+will be looking for clusters in our data and hope to see stronger
+correlations with higher propensities to engage with the emails in those
+target customers.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+\end{tcolorbox}
+
+    \subsection{Live Analytics Data}\label{live-analytics-data}
+
+    The Live Anlaytics contains demographic data for ticketholder attendees.
+
+See the data dictionary for relevant information.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{18}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df\PYZus{}liva23} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}csv}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{/Users/jm/dev/acl\PYZus{}spring\PYZus{}24\PYZus{}bulls2/data/raw/LiveA Demographic Data/22\PYZhy{}23 LiveA (Season Ticketholder Attendees).csv}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+
+\PY{n}{df\PYZus{}liva24} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}csv}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{/Users/jm/dev/acl\PYZus{}spring\PYZus{}24\PYZus{}bulls2/data/raw/LiveA Demographic Data/23\PYZhy{}24 LiveA (Season Ticketholder Attendees).csv}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+/var/folders/3q/d621fwvs43q2f6s93g46njd00000gn/T/ipykernel\_85626/3471165704.py:3
+: DtypeWarning: Columns (6) have mixed types. Specify dtype option on import or
+set low\_memory=False.
+  df\_liva24 = pd.read\_csv("/Users/jm/dev/acl\_spring\_24\_bulls2/data/raw/LiveA
+Demographic Data/23-24 LiveA (Season Ticketholder Attendees).csv")
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{20}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{df\PYZus{}liva23}\PY{o}{.}\PY{n}{info}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 76884 entries, 0 to 76883
+Columns: 253 entries, ult\_party\_id to vehicle\_type
+dtypes: float64(217), int64(1), object(35)
+memory usage: 148.4+ MB
+None
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{23}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df\PYZus{}liva23}\PY{o}{.}\PY{n}{describe}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{23}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+       ult\_party\_id       acct\_id  age\_two\_yr\_incr\_input\_indv  \textbackslash{}
+count  5.528800e+04  7.688400e+04                48803.000000
+mean   5.221303e+08  2.382599e+07                   41.809704
+std    5.934971e+08  8.032407e+06                   13.966835
+min    4.693330e+07  1.000120e+05                   18.000000
+25\%    8.229506e+07  2.071969e+07                   30.000000
+50\%    1.911863e+08  2.797470e+07                   40.000000
+75\%    1.040008e+09  2.967570e+07                   50.000000
+max    1.746297e+09  3.125330e+07                   99.000000
+
+       age\_two\_yr\_incr\_1st\_indv  age\_two\_yr\_incr\_2nd\_indv  race\_cd  \textbackslash{}
+count              49936.000000              24328.000000      0.0
+mean                  45.213373                 49.783295      NaN
+std                   13.630294                 15.246266      NaN
+min                   18.000000                 18.000000      NaN
+25\%                   34.000000                 40.000000      NaN
+50\%                   44.000000                 50.000000      NaN
+75\%                   54.000000                 60.000000      NaN
+max                   99.000000                 99.000000      NaN
+
+       adult\_hh\_num  hh\_male\_18\_24\_ind  hh\_female\_18\_24\_ind  hh\_unk\_18\_24\_ind  \textbackslash{}
+count  52362.000000             2720.0               2582.0             132.0
+mean       1.925748                1.0                  1.0               1.0
+std        0.964341                0.0                  0.0               0.0
+min        1.000000                1.0                  1.0               1.0
+25\%        1.000000                1.0                  1.0               1.0
+50\%        2.000000                1.0                  1.0               1.0
+75\%        2.000000                1.0                  1.0               1.0
+max        6.000000                1.0                  1.0               1.0
+
+       {\ldots}  propn\_score\_minor\_499  client\_event\_cnt    client\_tkt  \textbackslash{}
+count  {\ldots}           57505.000000      55575.000000  55575.000000
+mean   {\ldots}             508.406486          0.936824      2.417256
+std    {\ldots}             177.416817          2.187956      9.741104
+min    {\ldots}              64.000000          0.000000      0.000000
+25\%    {\ldots}             378.000000          0.000000      0.000000
+50\%    {\ldots}             508.000000          0.000000      0.000000
+75\%    {\ldots}             636.000000          1.000000      2.000000
+max    {\ldots}             985.000000        115.000000   1231.000000
+
+           client\_sp  client\_pe\_tkt\_cnt  client\_pe\_sp  client\_tkt\_price  \textbackslash{}
+count   55575.000000       24954.000000  25261.000000      24954.000000
+mean      360.540082           2.574754    366.636250        148.390474
+std      1571.368671           1.292205    433.674626        152.124717
+min         0.000000           1.000000      5.000000          5.000000
+25\%         0.000000           2.000000    156.500000         69.172500
+50\%         0.000000           2.000000    258.720000        110.000000
+75\%       327.840000           3.000000    428.000000        179.000000
+max    155742.680000          34.400000  19188.640000       3500.000000
+
+       client\_tkt\_price\_max  client\_tkt\_price\_min  client\_walkup\_buyer\_ind
+count          24954.000000          24954.000000                      0.0
+mean             177.148323            126.229601                      NaN
+std              205.705139            142.751814                      NaN
+min                5.000000              4.250000                      NaN
+25\%               76.000000             50.400000                      NaN
+50\%              129.000000             90.000000                      NaN
+75\%              204.000000            150.000000                      NaN
+max             6720.000000           3500.000000                      NaN
+
+[8 rows x 218 columns]
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+\end{tcolorbox}
+
+
+    % Add a bibliography block to the postdoc
+    
+    
+    
+\end{document}
